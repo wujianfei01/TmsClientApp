@@ -1,0 +1,30 @@
+/*公共部分*/
+body{
+	background: #f6f5fa;
+}
+.title {
+	padding: 10px 15px 10px 10px;
+	color: #6d6d72;
+	font-size: 15px;
+}
+
+.mui-table-view-cell label{
+	width: 90px;
+	height: 50px;
+	line-height: 50px;
+	font-size: 1.0rem;
+	color: #999999;
+	font-family: "微软雅黑";
+	font-weight: 10;
+	color: #a3a0a0;
+}
+.mui-table-view-cell input {
+	width:220px;
+	border: none;
+	font-size: 0.9rem;
+	color:#7c7c7c;
+	text-align: left;
+    float: right;
+	padding: 0;
+	/*border: 1px solid red;*/
+}

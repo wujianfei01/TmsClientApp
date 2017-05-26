@@ -1,0 +1,73 @@
+body{
+	background: #FFFFFF;
+}
+.mui-content{
+	margin-top:0;
+	background: #FFFFFF;
+}
+.top{
+	width: 100%;
+}
+.top img{
+	width: 100%;
+}
+
+#login-form{
+	margin-top: 10px;
+}
+
+.count-height{
+	display: block;
+	/*border: 1px solid red;*/
+}
+#login-form label{
+	width: 25%;
+	height:50px;
+	padding: 0;
+	line-height: 50px;
+	text-align: center;
+	letter-spacing: 15px;
+	font-size: 1.12rem;
+	color: #999999;
+	font-family: "微软雅黑";
+	/*border: 1px solid red;*/
+}
+.mui-input-row{
+	width: 90%;
+	margin-left: 5%;
+	border-bottom: 1px solid #CCCCCC;
+	/*border: 1px solid #CCCCCC;*/
+}
+#login-form input{
+	width:65%;
+	height:50px;
+	border: none;
+	/*border: 1px solid red;*/
+	padding:10px 10px;
+	font-size: 0.95rem;
+}
+.mui-content-padded{
+	margin-top:20px;
+}
+#forgetPassword{
+	display: block;
+	color:#39a8e1;
+	float: right;
+	margin: 0 5px 20px 0px ;
+}
+#login{
+	width: 94%;
+	/*color: #5b2900;
+	background: #fead31;*/
+	border: none;
+	margin-left: 3%;
+}
+#reg{
+	width: 94%;
+	color: #666666;
+	background: #FFFFFF;
+	outline: none;
+	margin-left: 3%;
+	margin-top:22px;
+	border: 1px solid #CCCCCC;
+}
