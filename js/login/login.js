@@ -133,7 +133,7 @@ function startlogin(phone, pwd) {
 				//console.log("code=" + code);
 				if(code == 1) {
 					var contid=JSON.parse(xhr.responseText).Data[0].cont_id;
-					plus.storage.setItem("contid", contid);
+					plus.storage.setItem("contid", contid.toString());
 					plus.storage.setItem("phone", phone);
 					plus.storage.setItem("password", password);
 					//clicked("mainpage.html", true);

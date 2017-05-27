@@ -84,13 +84,14 @@ window.addEventListener("LoadDetailById", function(e) {
 function loadSourceInfo(wid,wno)
 {
 	document.getElementById("maintitle").innerText=wno;
-	document.getElementById('seltext').value=wid;
-	console.log(wid);
+	document.getElementById('workid').value=wid;
+	//console.log(wid);
 }
 var i=1,gentry=null,w=null;
 var hl=null,le=null,de=null,ie=null;
 var unv=true;
-var bUpdated=false; //用于兼容可能提前注入导致DOM未解析完更新的问题
+var bUpdated=false;
+var addrStr='';
 // H5 plus事件处理
 function plusReady(){
 	plus.io.resolveLocalFileSystemURL('_doc/', function(entry){
@@ -125,6 +126,7 @@ if(window.plus){
 },false );
 	function getImage(){
 	var tmp=document.getElementById('selval').value;
+	var spc=document.getElementById('curraddr').value;
 	if(!tmp)
 	{
 		mui.alert('请先选择节点!');
@@ -133,7 +135,8 @@ if(window.plus){
 	cmr.captureImage(function(p){
 		plus.io.resolveLocalFileSystemURL(p, function(entry){
 			createItem(entry);
-			ToBase64(entry.toLocalURL(),500,20,addrStr);
+			//console.log('2'+addrStr);
+			ToBase64(entry.toLocalURL(),500,20,spc);
 		}, function(e){
 			//outLine('读取拍照文件错误：'+e.message);
 		});
@@ -160,12 +163,14 @@ function updateHistory(){
 	if(bUpdated||!gentry||!document.body){//bug 兼容可能提前注入导致DOM未解析完更新的问题
 		return;
 	}
+	var spc=document.getElementById('curraddr').value;
   	var reader = gentry.createReader();
   	reader.readEntries(function(entries){
   		for(var i in entries){
   			if(entries[i].isFile){
   				createItem(entries[i]);
-  				ToBase64(entries[i].toLocalURL(),500,20,addrStr);
+  				//console.log('1'+addrStr);
+  				ToBase64(entries[i].toLocalURL(),500,20,spc);
   			}
   		}
   	}, function(e){
@@ -218,21 +223,36 @@ function displayFile(li){
 function doUpload()
 {
 	var tmp=document.getElementById('selval').value;
+	var transid=document.getElementById("workid").value;
+	var myspace=document.getElementById('curraddr').value;
+	var contid=plus.storage.getItem("contid");
 	if(!tmp)
 	{
 		mui.alert('请先选择节点!');
-		return;} 		
+		return;} 
+		if(!transid)
+		{
+			mui.alert('未取得运单信息,请重试!');
+		return;
+		}
 		if(base64Data.length==0)
 		{
 			mui.alert('无待上传照片!');
 		    return;
 		}
-  		//console.log(base64Data[0]);   
+  		//console.log(base64Data[0]);  
+  		while(FinishedTask)
+		{
+			break;
+		}	
+		FinishedTask=false;
   		var tmpStr='{"data":[';
   		for(var i=0;i<base64Data.length;i++)
   		{
-  			//console.log(i);
-  			tmpStr+='{"files":"'+base64Data[i]+'"},';
+  			//console.log(addrStr);
+  			//console.log(typeof(addrStr));
+  			tmpStr+='{"files":"'+base64Data[i]+'","workid":"'+transid+'","stauesid":"'+tmp+'","address":"'+myspace+'","contid":"'+contid+'"},';
+  			//console.log(tmpStr);
   		}
   		if(tmpStr!='')
 		   tmpStr=tmpStr.substr(0,tmpStr.length-1);
@@ -256,25 +276,24 @@ function cleanHistory(){
 		//console.log('error');
 	});
 };
-
+var FinishedTask=false;
 function ToBase64(path,zipwidth,tsize,txval)
 	{
 		while(addrStr=='')
 		{
 			break;
 		}
+		FinishedTask=true;
     var img = new Image();
     img.src = path; 
     img.onload = function() {
         var that = this;
-        //保持图像的长宽比 
         var w = that.width,
             h = that.height,
             scale = w / h;
         w = zipwidth;
         h = w / scale;
-
-        //创建canvas
+        
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
 
@@ -299,7 +318,7 @@ function ToBase64(path,zipwidth,tsize,txval)
         ctx.strokeStyle = 'yellow';
         ctx.strokeText(addrStr,fleft,ftop);//文字边框
 
-        var base64 = canvas.toDataURL('image/jpeg', 0.8); //设置图像清晰度 1最清晰，越低越模糊。
+        var base64 = canvas.toDataURL('image/jpeg', 1); //设置图像清晰度 1最清晰，越低越模糊。
         //var base64 = canvas.toDataURL();
          //console.log(base64);
          base64Data.push(base64);
@@ -310,7 +329,7 @@ function getGeocode(){
 	plus.geolocation.getCurrentPosition( geoInf, function ( e ) {
 		//console.log( "获取定位位置信息失败："+e.message );
 	},{geocode:true});};
-var addrStr='';
+
 var base64Data= new Array();
 function geoInf( position ) {
 	//plus.nativeUI.showWaiting('获取位置中...', {
@@ -339,6 +358,7 @@ function geoInf( position ) {
 	//console.log(JSON.stringify(position));
 	//console.log( str );
 	addrStr=str;
+	document.getElementById('curraddr').value=position.addresses;
 	//console.log( addrStr );
 	//plus.nativeUI.closeWaiting();
 };

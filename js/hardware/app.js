@@ -5,7 +5,7 @@
  **/
 
 var publicUrl = "http://115.159.219.240:8080/webPay/";
-var tmsApiUrl = "http://192.168.102.80/AppHandler/Handler/MainHandler.ashx";
+var tmsApiUrl = "http://192.168.0.220/AppHandler/Handler/MainHandler.ashx";
 function getUrlParam(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 	var r = window.location.search.substr(1).match(reg);
